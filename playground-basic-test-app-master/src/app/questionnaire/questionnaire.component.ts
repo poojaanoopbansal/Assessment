@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { QuestionnaireService } from '../questionnaire.service';
 import { NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-questionnaire',
@@ -12,15 +13,17 @@ export class QuestionnaireComponent implements OnInit {
   model: any;
   questionForm: NgForm;
   answers={};
+  subscription: Subscription[];
 
   constructor(private quesService: QuestionnaireService) { }
 
   ngOnInit(): void {
-    this.quesService.getQuestions().subscribe((data)=>
+    this.subscription.push(this.quesService.getQuestions().subscribe((data)=>
     {
     this.questions = data;
     this.model = {...this.questions};
     }
+    )
     );
   }
   submitQuestion() {
@@ -39,6 +42,10 @@ export class QuestionnaireComponent implements OnInit {
           }
         }}
     }
+  }
+
+  ngOnDestroy() {
+    this.subscription.forEach((item) => item.unsubscribe());
   }
 
 }
