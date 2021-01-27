@@ -1,0 +1,49 @@
+<div class="container">
+<form #questionForm="ngForm" (ngSubmit)="submitQuestion()" class="formContainer">
+    <div *ngIf="model">
+        <div *ngFor="let question of model.item">
+            <div *ngIf="question.type === 'boolean' else second">
+                <div>{{question.text}}</div>
+                <input type="radio" name={{question.linkId}} value= true [(ngModel)]="question['answer']"required>
+                <label>Yes</label>
+                <input type="radio" name={{question.linkId}} value= false [(ngModel)]="question['answer']">
+                <label>No</label>
+            </div>
+            <ng-template #second>
+                <div *ngFor="let group of question.item">
+                        <div *ngIf="group.type === 'string' else innerSecond">
+                                <div><label>{{group.text}}</label></div>
+                                <div><input type="text" name={{group.linkId}} [(ngModel)]="group['answer']" 
+                                    required></div>
+                            </div>
+                            <ng-template #innerSecond>
+                                <ng-container *ngIf="group.type === 'date' else innerThird">
+                                    <div><label>{{group.text}}</label></div>
+                                    <div><input type="date" name={{group.linkId}} [(ngModel)]="group['answer']"
+                                        required ngModel birthYear></div>
+                                </ng-container>
+                            </ng-template>
+                            <ng-template #innerThird>
+                                    <ng-container *ngIf="group.type === 'boolean'">
+                                            <div>{{group.text}}</div>
+                                            <input type="radio" value="true" name={{group.linkId}} required [(ngModel)]="group['answer']"
+                                            required>
+                                            <label>Yes</label>
+                                            <input type="radio" value="false" name={{group.linkId}} [(ngModel)]="group['answer']"
+                                            required>
+                                            <label>No</label>
+                                    </ng-container>
+                                </ng-template>
+                            </div>
+            </ng-template>
+        </div>
+    </div>
+    <button class="btn btn-success" [disabled]="!questionForm.form.valid" type="submit">Submit</button>
+</form>
+<div class="paddingTop20">
+    <div class="paddingBottom20">Answers</div>
+    <div *ngFor="let item of answers|keyvalue">
+        {{item.value}}
+    </div>
+</div>
+

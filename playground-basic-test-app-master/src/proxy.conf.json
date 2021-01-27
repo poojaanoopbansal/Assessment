@@ -1,0 +1,8 @@
+{
+    "/hapi*": {
+        "target": "http://hapi.fhir.org/",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug"
+    }
+}
